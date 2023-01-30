@@ -1,17 +1,18 @@
 import java.util.HashMap;
+import java.util.Map;
 
 public class Comparator {
-    MonthlyReport monthlyReport;
-    YearlyReport yearlyReport;
+    private final MonthlyReport monthlyReport;
+    private final YearlyReport yearlyReport;
 
     public Comparator(MonthlyReport monthlyReport, YearlyReport yearlyReport) {
         this.monthlyReport = monthlyReport;
         this.yearlyReport = yearlyReport;
     }
 
-    void compare() {
-        HashMap<Integer, Integer> expenseInMonth = new HashMap<>();
-        HashMap<Integer, Integer> incomeInMonth = new HashMap<>();
+    public void compare() {
+        Map<Integer, Integer> expenseInMonth = new HashMap<>();
+        Map<Integer, Integer> incomeInMonth = new HashMap<>();
         for (int i = 1; i < 4; i++) {
             int expenses = 0;
             int incomes = 0;

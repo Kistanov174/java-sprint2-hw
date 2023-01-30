@@ -1,7 +1,7 @@
 public class RecordMthReport {
-    String itemName;
-    boolean isExpense;
-    int month, quantity, sumOfOne;
+    public String itemName;
+    public boolean isExpense;
+    public int month, quantity, sumOfOne;
 
     public RecordMthReport(int month, String itemName, boolean isExpense, int quantity, int sumOfOne) {
         this.month = month;

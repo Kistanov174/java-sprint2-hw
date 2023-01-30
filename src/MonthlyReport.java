@@ -1,17 +1,15 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class MonthlyReport {
-    List<String> report;
-    List<RecordMthReport> allMonthlyReport = new ArrayList<>();
+    public List<RecordMthReport> allMonthlyReport = new ArrayList<>();
+    private final Map<String, Integer> monthlyExpense = new HashMap<>();
+    private final Map<String, Integer> monthlyIncome = new HashMap<>();
 
-    void readReport(int month, String path) {
-        report = readReportFile(path);
+    public void readReport(int month, String path) {
+        List<String> report = readReportFile(path);
         for (int i = 1; i < report.size(); i++) {
             String[] line = report.get(i).split(",");
             String itemName = line[0];
@@ -28,35 +26,17 @@ public class MonthlyReport {
         }
         catch(IOException e) {
             System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно файл не находится в нужной директории.");
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 
-    void getInfo(int month) {
-        System.out.println(Main.getNameOfMonth(month));
-        getMaxExpenseAndIncomeInMonth(month);
-    }
-
-    private void getMaxExpenseAndIncomeInMonth(int month) {
+    public void getInfo(int month) {
         int maxExpense = 0;
         int maxIncome = 0;
         String expenseName = null;
         String incomeName = null;
-        HashMap<String, Integer> monthlyExpense = new HashMap<>();
-        HashMap<String, Integer> monthlyIncome = new HashMap<>();
-        for (RecordMthReport line : allMonthlyReport) {
-            if (line.month != month) {
-                continue;
-            }
-            if (line.isExpense) {
-                int expense = monthlyExpense.getOrDefault(line.itemName, 0) + line.quantity * line.sumOfOne;
-                monthlyExpense.put(line.itemName, expense);
-            }
-            if (!line.isExpense) {
-                int income = monthlyIncome.getOrDefault(line.itemName, 0) + line.quantity * line.sumOfOne;
-                monthlyIncome.put(line.itemName, income);
-            }
-        }
+        System.out.println(Main.getNameOfMonth(month));
+        divideExpenseAndIncome(month);
         for (String itemName : monthlyExpense.keySet()) {
             int expense = monthlyExpense.get(itemName);
             if (expense > maxExpense) {
@@ -73,5 +53,21 @@ public class MonthlyReport {
         }
         System.out.println("Самая большая трата: " + maxExpense + " на " + "'" + expenseName + "'");
         System.out.println("Самый прибыльный товар: " + "'" + incomeName + "'" + " на сумму " + maxIncome);
+    }
+
+    private void divideExpenseAndIncome(int month) {
+        for (RecordMthReport line : allMonthlyReport) {
+            if (line.month != month) {
+                continue;
+            }
+            if (line.isExpense) {
+                int expense = monthlyExpense.getOrDefault(line.itemName, 0) + line.quantity * line.sumOfOne;
+                monthlyExpense.put(line.itemName, expense);
+            }
+            if (!line.isExpense) {
+                int income = monthlyIncome.getOrDefault(line.itemName, 0) + line.quantity * line.sumOfOne;
+                monthlyIncome.put(line.itemName, income);
+            }
+        }
     }
 }

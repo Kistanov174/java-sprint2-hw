@@ -1,19 +1,15 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class YearlyReport {
-    List<String> report;
-    List<RecordYearReport> allYearlyReport = new ArrayList<>();
-    HashMap<Integer, Integer> expenseInMonth = new HashMap<>();
-    HashMap<Integer, Integer> incomeInMonth = new HashMap<>();
+    public List<RecordYearReport> allYearlyReport = new ArrayList<>();
+    public Map<Integer, Integer> expenseInMonth = new HashMap<>();
+    public Map<Integer, Integer> incomeInMonth = new HashMap<>();
 
-    void readReport(String path) {
-        report = readReportFile(path);
+    public void readReport(String path) {
+        List<String> report = readReportFile(path);
         for (int i = 1; i < report.size(); i++) {
             String[] dataOfLine = report.get(i).split(",");
             int month = Integer.parseInt(dataOfLine[0]);
@@ -37,11 +33,11 @@ public class YearlyReport {
         }
         catch(IOException e) {
             System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно файл не находится в нужной директории.");
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 
-    void printInfo() {
+    public void getInfo() {
         System.out.println("Отчет за 2021 год");
         for(int i = 1; i <= incomeInMonth.size(); i++) {
             System.out.println("Прибыль за " + Main.getNameOfMonth(i) + " месяц " + getProfit(i));
@@ -54,7 +50,7 @@ public class YearlyReport {
         return incomeInMonth.get(month) - expenseInMonth.get(month);
     }
 
-    private int avrValueOf(HashMap<Integer, Integer> monthlyData) {
+    private int avrValueOf(Map<Integer, Integer> monthlyData) {
         int sum = 0;
         for (Integer monthValue : monthlyData.values()) {
             sum += monthValue;
